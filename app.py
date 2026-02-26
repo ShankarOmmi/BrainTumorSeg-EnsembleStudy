@@ -3,6 +3,7 @@ import gdown
 import streamlit as st
 import torch
 from PIL import Image
+import numpy as np
 from model import UNet
 MODEL_PATH = "best_model_hy.pth"
 FILE_ID = "1LoiR4InZtpVQHBg986rdkYdzcemF-qav"
