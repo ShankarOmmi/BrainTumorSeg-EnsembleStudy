@@ -1,0 +1,9 @@
+streamlit
+torch
+torchvision
+opencv-python
+pillow
+numpy
+gdown
+
+https://drive.google.com/file/d/1LoiR4InZtpVQHBg986rdkYdzcemF-qav/view?usp=sharing
