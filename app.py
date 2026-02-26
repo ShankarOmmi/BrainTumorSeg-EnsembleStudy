@@ -47,16 +47,41 @@ uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg", "png", "jpeg"]
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Original Image", use_column_width=True)
 
     input_tensor = preprocess_image(image)
     prediction = predict(input_tensor)
 
-    st.image(prediction, caption="Predicted Mask", use_column_width=True)
+    # Resize original image to 256x256
+    original = np.array(image.resize((256, 256)))
 
-    # Overlay
-    original = np.array(image.resize((256, 256)))   
+    # Make sure mask is 0 or 1
+    prediction = (prediction > 0.5).astype(np.uint8)
+
+    # Create overlay
     overlay = original.copy()
     overlay[prediction == 1] = [255, 0, 0]
 
-    st.image(overlay, caption="Overlay Result", use_column_width=True)
+    # Calculate tumor percentage
+    tumor_pixels = np.sum(prediction)
+    total_pixels = prediction.size
+    percentage = (tumor_pixels / total_pixels) * 100
+
+    st.subheader("Segmentation Results")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.image(original, caption="Original MRI", width=250)
+
+    with col2:
+        st.image(prediction * 255, caption="Predicted Mask", width=250)
+
+    with col3:
+        st.image(overlay, caption="Overlay Result", width=250)
+
+    st.markdown("---")
+
+    if percentage > 1:
+        st.error(f"⚠ Tumor Detected: {percentage:.2f}% of brain area affected.")
+    else:
+        st.success("✅ You are safe. No tumor detected.")
