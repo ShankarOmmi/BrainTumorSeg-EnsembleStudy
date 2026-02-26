@@ -55,7 +55,8 @@ if uploaded_file:
     st.image(prediction, caption="Predicted Mask", use_column_width=True)
 
     # Overlay
-    original = np.array(image.resize((256, 256)))    overlay = original.copy()
+    original = np.array(image.resize((256, 256)))   
+    overlay = original.copy()
     overlay[prediction == 1] = [255, 0, 0]
 
     st.image(overlay, caption="Overlay Result", use_column_width=True)
