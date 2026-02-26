@@ -26,8 +26,8 @@ model = load_model()
 
 # Preprocess function
 def preprocess_image(image):
+    image = image.resize((256, 256))
     image = np.array(image)
-    image = cv2.resize(image, (256, 256))
     image = image / 255.0
     image = np.transpose(image, (2, 0, 1))
     image = torch.tensor(image, dtype=torch.float32).unsqueeze(0)
